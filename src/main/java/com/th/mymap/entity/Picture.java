@@ -17,11 +17,6 @@ public class Picture extends CreatedAtEntity{
     @JoinColumn(name = "ilocation")
     private Location location;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "iuser")
-    private User user;
-
     @Column
     private String picture;
 }

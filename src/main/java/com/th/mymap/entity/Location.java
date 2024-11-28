@@ -26,7 +26,7 @@ public class Location extends BaseEntity{
     private Double lng;
 
     @Column
-    private String location;
+    private String title;
 
     @Column
     private LocalDateTime date;
