@@ -20,7 +20,7 @@ public class QLocation extends EntityPathBase<Location> {
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QLocation location1 = new QLocation("location1");
+    public static final QLocation location = new QLocation("location");
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
@@ -35,7 +35,7 @@ public class QLocation extends EntityPathBase<Location> {
 
     public final NumberPath<Double> lng = createNumber("lng", Double.class);
 
-    public final StringPath location = createString("location");
+    public final StringPath title = createString("title");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;

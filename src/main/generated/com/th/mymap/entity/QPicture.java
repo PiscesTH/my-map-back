@@ -33,8 +33,6 @@ public class QPicture extends EntityPathBase<Picture> {
 
     public final StringPath picture = createString("picture");
 
-    public final QUser user;
-
     public QPicture(String variable) {
         this(Picture.class, forVariable(variable), INITS);
     }
@@ -54,7 +52,6 @@ public class QPicture extends EntityPathBase<Picture> {
     public QPicture(Class<? extends Picture> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.location = inits.isInitialized("location") ? new QLocation(forProperty("location"), inits.get("location")) : null;
-        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
     }
 
 }

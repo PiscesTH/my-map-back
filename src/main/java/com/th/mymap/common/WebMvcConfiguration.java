@@ -35,12 +35,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer { //새로고침
                 });
     }
 
-    //cors설정 - 전역
+/*    //cors설정 - 전역
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "DELETE", "UPDATE") // 허용할 HTTP method
                 .allowCredentials(true); // 쿠키 인증 요청 허용
-    }
+    }*/
 }
