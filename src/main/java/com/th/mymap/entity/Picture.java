@@ -19,4 +19,7 @@ public class Picture extends CreatedAtEntity{
 
     @Column
     private String picture;
+
+    @Column
+    private String thumbnail;
 }

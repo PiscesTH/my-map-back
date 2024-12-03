@@ -42,13 +42,21 @@ public class LocationService {
         locationRepository.save(location);
 
         String target = "/location/" + location.getIlocation();
-        for (MultipartFile original : originals) {
+/*        for (MultipartFile original : originals) {
             String savedFileName = myFileUtils.transferTo(original, target);
             Picture picture = new Picture();
             picture.setLocation(location);
             picture.setPicture(savedFileName);
             pictureRepository.save(picture);
+        }*/
+        for (int i = 0; i < originals.size(); i++) {
+            String[] savedFileName = myFileUtils.saveOriginAndThumbnail(originals.get(i), thumbnails.get(i), target);
+            Picture picture = new Picture();
+            picture.setLocation(location);
+            picture.setPicture(savedFileName[0]);
+            picture.setThumbnail(savedFileName[1]);
+            pictureRepository.save(picture);
         }
-        return new ResVo(1);
+        return new ResVo(location.getIlocation().intValue());
     }
 }

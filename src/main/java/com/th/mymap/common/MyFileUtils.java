@@ -36,8 +36,24 @@ public class MyFileUtils {
         }
     }
 
-    public void saveThumbnail(MultipartFile file, String path, String saveFileName) {
-
+    public String[] saveOriginAndThumbnail(MultipartFile origin, MultipartFile thumbnail, String path) {
+        try {
+            String originalFileName = origin.getOriginalFilename();
+            String ext = originalFileName.substring(originalFileName.lastIndexOf("."));
+            String originFileName = UUID.randomUUID() + ext;
+            String thumbnailFileName = "s_" + originFileName;
+            File dir = new File(uploadPrefixPath, String.valueOf(path));
+            dir.mkdirs(); // 폴더 생성
+            log.info("path : {}", dir.getPath());
+            File saveOriginFile = new File(dir.getPath(), originFileName);
+            origin.transferTo(saveOriginFile); // 파일 저장
+            File saveThumbnailFile = new File(dir.getPath(), thumbnailFileName);
+            thumbnail.transferTo(saveThumbnailFile);
+            return new String[]{originFileName, thumbnailFileName};
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RestApiException(AuthErrorCode.IMAGE_UPLOAD_FAIL);
+        }
     }
 
     public void delDirTrigger(String relativePath) {

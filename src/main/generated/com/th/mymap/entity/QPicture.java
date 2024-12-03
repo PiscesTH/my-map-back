@@ -33,6 +33,8 @@ public class QPicture extends EntityPathBase<Picture> {
 
     public final StringPath picture = createString("picture");
 
+    public final StringPath thumbnail = createString("thumbnail");
+
     public QPicture(String variable) {
         this(Picture.class, forVariable(variable), INITS);
     }
