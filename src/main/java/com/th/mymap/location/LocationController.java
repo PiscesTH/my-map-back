@@ -17,10 +17,21 @@ import java.util.List;
 public class LocationController {
     private final LocationService service;
 
-    @PostMapping("/record")
-    public ApiResponse<ResVo> postPicture(@RequestPart("dto") LocationDto dto,
+    @PostMapping("/location")
+    public ApiResponse<ResVo> postLocation(@RequestPart("dto") LocationDto dto,
                                       @RequestPart("originals") List<MultipartFile> originals,
                                       @RequestPart("thumbnails") List<MultipartFile> thumbnails) {
         return new ApiResponse<>(service.postLocation(dto, originals, thumbnails));
     }
+
+    @DeleteMapping("/location")
+    public ApiResponse<?> delLocation(@RequestParam Long ilocation) {
+        return new ApiResponse<>(service.delLocation(ilocation));
+    }
+
+    @DeleteMapping("/location/{ipicture}")
+    public ApiResponse<?> delPicture(@PathVariable Long ipicture) {
+        return new ApiResponse<>(service.delPicture(ipicture));
+    }
+
 }

@@ -59,4 +59,39 @@ public class LocationService {
         }
         return new ResVo(location.getIlocation().intValue());
     }
+
+    @Transactional
+    public String delPicture(Long ipicture) {
+        Picture picture = pictureRepository.getReferenceById(ipicture);
+        delPictures(picture);
+        pictureRepository.delete(picture);
+        return "삭제 완료";
+    }
+
+    @Transactional
+    public String delLocation(Long ilocation) {
+        Location location = locationRepository.getReferenceById(ilocation);
+/*        List<Picture> pictures = pictureRepository.findAllByLocation(location);
+        for (Picture picture : pictures) {
+            delPictures(picture);
+        }*/
+        String path = "/location/" + location.getIlocation();
+        myFileUtils.delDirTrigger(path);
+        pictureRepository.deleteAllByLocation(location);
+        locationRepository.delete(location);
+        return "삭제 완료";
+    }
+
+    public void getLocation() {
+
+    }
+
+    private void delPictures(Picture picture) {
+        String[] fileNames = new String[]{picture.getPicture(), picture.getThumbnail()};
+        for (String fileName : fileNames) {
+            String filePath = "/location/" + picture.getLocation().getIlocation() + "/" + fileName;
+            myFileUtils.delFile(filePath);
+        }
+    }
+
 }

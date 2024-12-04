@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Slf4j
@@ -59,10 +63,22 @@ public class MyFileUtils {
     public void delDirTrigger(String relativePath) {
         delDir(uploadPrefixPath + relativePath);
     }
-    public void delFile(String filePath) {//파일 삭제
+
+    public void delFile2(String filePath) {//파일 삭제
         File file = new File(uploadPrefixPath + filePath);
         if(file.exists()) {
             file.delete();
+        }
+    }
+
+    public void delFile(String filePath) {
+        Path path = Paths.get(uploadPrefixPath + filePath);
+        log.info(uploadPrefixPath + filePath);
+        try {
+            // 파일 삭제
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            log.info("파일 삭제 중 오류가 발생했습니다: " + e.getMessage());
         }
     }
 
