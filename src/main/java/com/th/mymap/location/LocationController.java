@@ -1,6 +1,7 @@
 package com.th.mymap.location;
 
 import com.th.mymap.location.model.LocationDto;
+import com.th.mymap.location.model.LocationVo;
 import com.th.mymap.response.ApiResponse;
 import com.th.mymap.response.ResVo;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,11 @@ import java.util.List;
 @RequestMapping("/api")
 public class LocationController {
     private final LocationService service;
+
+    @GetMapping("/location")
+    public ApiResponse<LocationVo> getLocation(@RequestParam Long ilocation) {
+        return new ApiResponse<>(service.getLocation(ilocation));
+    }
 
     @PostMapping("/location")
     public ApiResponse<ResVo> postLocation(@RequestPart("dto") LocationDto dto,

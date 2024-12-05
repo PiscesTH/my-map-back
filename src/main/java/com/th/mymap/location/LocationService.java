@@ -5,6 +5,8 @@ import com.th.mymap.entity.Location;
 import com.th.mymap.entity.Picture;
 import com.th.mymap.entity.User;
 import com.th.mymap.location.model.LocationDto;
+import com.th.mymap.location.model.LocationVo;
+import com.th.mymap.location.model.PictureVo;
 import com.th.mymap.repository.LocationRepository;
 import com.th.mymap.repository.PictureRepository;
 import com.th.mymap.repository.UserRepository;
@@ -25,6 +27,28 @@ public class LocationService {
     private final UserRepository userRepository;
     private final LocationRepository locationRepository;
     private final PictureRepository pictureRepository;
+
+    @Transactional
+    public LocationVo getLocation(Long ilocation) {
+        //본인이 맞는지 확인하는거 나중에 추가
+
+        Location location = locationRepository.getReferenceById(ilocation);
+
+        LocationVo resultVo = new LocationVo();
+        resultVo.setIlocation(location.getIlocation());
+        resultVo.setTitle(location.getTitle());
+        resultVo.setDate(location.getDate());
+
+        List<Picture> pictures = pictureRepository.findAllByLocation(location);
+        List<PictureVo> pictureVos = pictures.stream().map(item -> PictureVo.builder()
+                .ipicture(item.getIpicture())
+                .thumbnails(item.getThumbnail())
+                .build()
+        ).toList();
+        resultVo.setPictures(pictureVos);
+
+        return resultVo;
+    }
 
     @Transactional
     public ResVo postLocation(LocationDto dto,
@@ -82,9 +106,6 @@ public class LocationService {
         return "삭제 완료";
     }
 
-    public void getLocation() {
-
-    }
 
     private void delPictures(Picture picture) {
         String[] fileNames = new String[]{picture.getPicture(), picture.getThumbnail()};
