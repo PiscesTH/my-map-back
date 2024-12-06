@@ -85,14 +85,6 @@ public class LocationService {
     }
 
     @Transactional
-    public String delPicture(Long ipicture) {
-        Picture picture = pictureRepository.getReferenceById(ipicture);
-        delPictures(picture);
-        pictureRepository.delete(picture);
-        return "삭제 완료";
-    }
-
-    @Transactional
     public String delLocation(Long ilocation) {
         Location location = locationRepository.getReferenceById(ilocation);
 /*        List<Picture> pictures = pictureRepository.findAllByLocation(location);
@@ -107,6 +99,15 @@ public class LocationService {
     }
 
 
+    @Transactional
+    public String delPicture(Long ipicture) {
+        Picture picture = pictureRepository.getReferenceById(ipicture);
+        delPictures(picture);
+        pictureRepository.delete(picture);
+        return "삭제 완료";
+    }
+
+    //내부에서 사용하는 메서드
     private void delPictures(Picture picture) {
         String[] fileNames = new String[]{picture.getPicture(), picture.getThumbnail()};
         for (String fileName : fileNames) {

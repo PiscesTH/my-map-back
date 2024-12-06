@@ -17,6 +17,13 @@ public class WebMvcConfiguration implements WebMvcConfigurer { //새로고침
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations("file:///D:/home/download/");
+        //외부 파일 불러올 때 필요한 설정 (?)
+    }
+
+    /*@Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
                 .addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/**")
@@ -33,7 +40,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer { //새로고침
                         return new ClassPathResource("/static/index.html");
                     }
                 });
-    }
+    }*/
 
 /*    //cors설정 - 전역
     @Override

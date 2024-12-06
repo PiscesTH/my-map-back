@@ -23,6 +23,12 @@ public class LocationController {
         return new ApiResponse<>(service.getLocation(ilocation));
     }
 
+    @GetMapping("/location/{ipicture}")
+    public ApiResponse<?> getPicture(@PathVariable Long ipicture) {
+
+        return new ApiResponse<>(null);
+    }
+
     @PostMapping("/location")
     public ApiResponse<ResVo> postLocation(@RequestPart("dto") LocationDto dto,
                                       @RequestPart("originals") List<MultipartFile> originals,
