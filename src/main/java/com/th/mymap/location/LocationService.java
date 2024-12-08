@@ -4,6 +4,7 @@ import com.th.mymap.common.MyFileUtils;
 import com.th.mymap.entity.Location;
 import com.th.mymap.entity.Picture;
 import com.th.mymap.entity.User;
+import com.th.mymap.location.model.AllLocationVo;
 import com.th.mymap.location.model.LocationDto;
 import com.th.mymap.location.model.LocationVo;
 import com.th.mymap.location.model.PictureVo;
@@ -48,6 +49,22 @@ public class LocationService {
         resultVo.setPictures(pictureVos);
 
         return resultVo;
+    }
+
+    @Transactional
+    public List<AllLocationVo> getAllLocation() {
+        User user = userRepository.getReferenceById(1L);
+        List<Location> locationList = locationRepository.findAllByUser(user);
+        List<AllLocationVo> resultList = locationList.stream().map(item -> {
+            AllLocationVo vo = new AllLocationVo();
+            vo.setIlocation(item.getIlocation());
+            vo.setTitle(item.getTitle());
+            vo.setDate(item.getDate());
+            vo.getLatlng().put("lat", item.getLat());
+            vo.getLatlng().put("lng", item.getLng());
+            return vo;
+        }).toList();
+        return resultList;
     }
 
     @Transactional

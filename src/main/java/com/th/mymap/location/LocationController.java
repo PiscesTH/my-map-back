@@ -1,5 +1,6 @@
 package com.th.mymap.location;
 
+import com.th.mymap.location.model.AllLocationVo;
 import com.th.mymap.location.model.LocationDto;
 import com.th.mymap.location.model.LocationVo;
 import com.th.mymap.response.ApiResponse;
@@ -21,6 +22,11 @@ public class LocationController {
     @GetMapping("/location")
     public ApiResponse<LocationVo> getLocation(@RequestParam Long ilocation) {
         return new ApiResponse<>(service.getLocation(ilocation));
+    }
+
+    @GetMapping()
+    public ApiResponse<List<AllLocationVo>> getAllLocation() {
+        return new ApiResponse<>(service.getAllLocation());
     }
 
     @GetMapping("/location/{ipicture}")
