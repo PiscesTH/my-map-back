@@ -41,8 +41,13 @@ public class LocationController {
         return new ApiResponse<>(service.delLocation(ilocation));
     }
 
-    @DeleteMapping("/location/pic/{ipicture}")
-    public ApiResponse<?> delPicture(@PathVariable Long ipicture) {
+    @GetMapping("location/pic/{fileName}")
+    public ApiResponse<?> downloadPicture(@RequestParam Long ipicture, @PathVariable String fileName) {
+        return new ApiResponse<>(null);
+    }
+
+    @DeleteMapping("/location/pic")
+    public ApiResponse<?> delPicture(@RequestParam Long ipicture) {
         return new ApiResponse<>(service.delPicture(ipicture));
     }
 
