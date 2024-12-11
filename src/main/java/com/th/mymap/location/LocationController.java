@@ -20,19 +20,13 @@ public class LocationController {
     private final LocationService service;
 
     @GetMapping("/location")
-    public ApiResponse<LocationVo> getLocation(@RequestParam Long ilocation) {
-        return new ApiResponse<>(service.getLocation(ilocation));
-    }
-
-    @GetMapping()
     public ApiResponse<List<AllLocationVo>> getAllLocation() {
         return new ApiResponse<>(service.getAllLocation());
     }
 
-    @GetMapping("/location/{ipicture}")
-    public ApiResponse<?> getPicture(@PathVariable Long ipicture) {
-
-        return new ApiResponse<>(null);
+    @GetMapping("/location/{ilocation}")
+    public ApiResponse<LocationVo> getLocation(@PathVariable Long ilocation) {
+        return new ApiResponse<>(service.getLocation(ilocation));
     }
 
     @PostMapping("/location")
@@ -47,7 +41,7 @@ public class LocationController {
         return new ApiResponse<>(service.delLocation(ilocation));
     }
 
-    @DeleteMapping("/location/{ipicture}")
+    @DeleteMapping("/location/pic/{ipicture}")
     public ApiResponse<?> delPicture(@PathVariable Long ipicture) {
         return new ApiResponse<>(service.delPicture(ipicture));
     }
