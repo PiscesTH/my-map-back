@@ -1,4 +1,3 @@
-/*
 package com.th.mymap.common;
 
 import lombok.Getter;
@@ -27,4 +26,3 @@ public class AppProperties {
         }
     }
 }
-*/
