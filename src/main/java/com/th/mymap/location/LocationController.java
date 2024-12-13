@@ -59,4 +59,8 @@ public class LocationController {
         return new ApiResponse<>(service.delPicture(ipicture));
     }
 
+/*    @GetMapping("/location/dummy")
+    public ApiResponse<List<AllLocationVo>> getAllLocationDummy() {
+        return new ApiResponse<>(service.getAllLocation());
+    }*/
 }

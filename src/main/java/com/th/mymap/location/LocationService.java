@@ -4,6 +4,8 @@ import com.th.mymap.common.MyFileUtils;
 import com.th.mymap.entity.Location;
 import com.th.mymap.entity.Picture;
 import com.th.mymap.entity.User;
+import com.th.mymap.exception.CommonErrorCode;
+import com.th.mymap.exception.RestApiException;
 import com.th.mymap.location.model.AllLocationVo;
 import com.th.mymap.location.model.LocationDto;
 import com.th.mymap.location.model.LocationVo;
@@ -12,6 +14,7 @@ import com.th.mymap.repository.LocationRepository;
 import com.th.mymap.repository.PictureRepository;
 import com.th.mymap.repository.UserRepository;
 import com.th.mymap.response.ResVo;
+import com.th.mymap.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -29,13 +33,17 @@ public class LocationService {
     private final UserRepository userRepository;
     private final LocationRepository locationRepository;
     private final PictureRepository pictureRepository;
+    private final AuthenticationFacade authenticationFacade;
 
     @Transactional
     public LocationVo getLocation(Long ilocation) {
-        //본인이 맞는지 확인하는거 나중에 추가
-
-        Location location = locationRepository.getReferenceById(ilocation);
-
+        User user = getLoginedUser();
+        Optional<Location> opt = locationRepository.findByIlocationAndUser(ilocation, user);
+        if (opt.isEmpty()) {
+            throw new RestApiException(CommonErrorCode.BAD_REQUEST);
+        }
+        log.info("iuser : {}",user.getIuser());
+        Location location = opt.get();
         LocationVo resultVo = new LocationVo();
         resultVo.setIlocation(location.getIlocation());
         resultVo.setTitle(location.getTitle());
@@ -54,18 +62,8 @@ public class LocationService {
 
     @Transactional
     public List<AllLocationVo> getAllLocation() {
-        User user = userRepository.getReferenceById(1L);
-        List<Location> locationList = locationRepository.findAllByUser(user);
-        List<AllLocationVo> resultList = locationList.stream().map(item -> {
-            AllLocationVo vo = new AllLocationVo();
-            vo.setIlocation(item.getIlocation());
-            vo.setTitle(item.getTitle());
-            vo.setDate(item.getDate());
-            vo.getLatlng().put("lat", item.getLat());
-            vo.getLatlng().put("lng", item.getLng());
-            return vo;
-        }).toList();
-        return resultList;
+        User user = getLoginedUser();
+        return getAllLocationProc(user);
     }
 
     @Transactional
@@ -73,7 +71,7 @@ public class LocationService {
                               List<MultipartFile> originals,
                               List<MultipartFile> thumbnails) {
         //임시 user
-        User user = userRepository.getReferenceById(1L);
+        User user = getLoginedUser();
 
         Location location = new Location();
         location.setUser(user);
@@ -104,11 +102,12 @@ public class LocationService {
 
     @Transactional
     public String delLocation(Long ilocation) {
-        Location location = locationRepository.getReferenceById(ilocation);
-/*        List<Picture> pictures = pictureRepository.findAllByLocation(location);
-        for (Picture picture : pictures) {
-            delPictures(picture);
-        }*/
+        User user = getLoginedUser();
+        Optional<Location> opt = locationRepository.findByIlocationAndUser(ilocation, user);
+        if (opt.isEmpty()) {
+            throw new RestApiException(CommonErrorCode.BAD_REQUEST);
+        }
+        Location location = opt.get();
         String path = "/location/" + location.getIlocation();
         myFileUtils.delDirTrigger(path);
         pictureRepository.deleteAllByLocation(location);
@@ -125,7 +124,12 @@ public class LocationService {
         return "삭제 완료";
     }
 
-    //내부에서 사용하는 메서드
+    //이미지 다운로드
+    public InputStreamResource downloadPicture(Long ilocation, String fileName) {
+        return myFileUtils.downloadFile(ilocation, fileName);
+    }
+
+    //이하부턴 내부에서 사용하는 메서드
     private void delPictures(Picture picture) {
         String[] fileNames = new String[]{picture.getPicture(), picture.getThumbnail()};
         for (String fileName : fileNames) {
@@ -134,8 +138,28 @@ public class LocationService {
         }
     }
 
-
-    public InputStreamResource downloadPicture(Long ilocation, String fileName) {
-        return myFileUtils.downloadFile(ilocation, fileName);
+    private User getLoginedUser() {
+        return userRepository.getReferenceById(authenticationFacade.getLoginUserPk());
     }
+
+    //user 정보를 받아 등록된 모든 위치를 반환(더미데이터 뿌릴때 코드가 중복되서 분리했는데, 다른 방식으로 해결됨. 그래도 일단은 분리시켜놓음)
+    private List<AllLocationVo> getAllLocationProc(User user) {
+        List<Location> locationList = locationRepository.findAllByUser(user);
+        List<AllLocationVo> resultList = locationList.stream().map(item -> {
+            AllLocationVo vo = new AllLocationVo();
+            vo.setIlocation(item.getIlocation());
+            vo.setTitle(item.getTitle());
+            vo.setDate(item.getDate());
+            vo.getLatlng().put("lat", item.getLat());
+            vo.getLatlng().put("lng", item.getLng());
+            return vo;
+        }).toList();
+        return resultList;
+    }
+
+    /*@Transactional
+    public List<AllLocationVo> getAllLocationDummy() {
+        User user = userRepository.getReferenceById(1L);
+        return getAllLocationProc(user);
+    }*/
 }
