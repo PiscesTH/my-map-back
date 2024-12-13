@@ -5,6 +5,7 @@ import com.th.mymap.common.Const;
 import com.th.mymap.common.MyCookieUtils;
 import com.th.mymap.entity.User;
 import com.th.mymap.exception.AuthErrorCode;
+import com.th.mymap.exception.CommonErrorCode;
 import com.th.mymap.exception.RestApiException;
 import com.th.mymap.repository.UserRepository;
 import com.th.mymap.response.ApiResponse;
@@ -13,6 +14,7 @@ import com.th.mymap.security.AuthenticationFacade;
 import com.th.mymap.security.JwtTokenProvider;
 import com.th.mymap.security.MyPrincipal;
 import com.th.mymap.security.MyUserDetails;
+import com.th.mymap.user.model.UserCoordinateDto;
 import com.th.mymap.user.model.UserSignInDto;
 import com.th.mymap.user.model.UserSignInVo;
 import com.th.mymap.user.model.UserSignUpDto;
@@ -120,5 +122,30 @@ public class UserSerivce {
         return UserSignInVo.builder()
                 .accessToken(at)
                 .build();
+    }
+
+    public UserCoordinateDto getCoordinate() {
+        Optional<User> opt = userRepository.findById(authenticationFacade.getLoginUserPk());
+        if (opt.isEmpty()) {
+            throw new RestApiException(CommonErrorCode.BAD_REQUEST);
+        }
+        User user = opt.get();
+        UserCoordinateDto result = new UserCoordinateDto();
+        result.setLat(user.getLat());
+        result.setLng(user.getLng());
+        return result;
+    }
+
+
+    public UserCoordinateDto patchCoordinate(UserCoordinateDto dto) {
+        Optional<User> opt = userRepository.findById(authenticationFacade.getLoginUserPk());
+        if (opt.isEmpty()) {
+            throw new RestApiException(CommonErrorCode.BAD_REQUEST);
+        }
+        User user = opt.get();
+        user.setLng(dto.getLng());
+        user.setLat(dto.getLat());
+        userRepository.save(user);
+        return dto;
     }
 }

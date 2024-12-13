@@ -34,8 +34,8 @@ public class User extends BaseEntity{
     private String email;
 
     @Column
-    private Double lat;
+    private Double lat = 33.450701;
 
     @Column
-    private Double lng;
+    private Double lng = 126.570667;
 }

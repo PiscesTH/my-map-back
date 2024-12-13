@@ -2,6 +2,7 @@ package com.th.mymap.user;
 
 import com.th.mymap.response.ApiResponse;
 import com.th.mymap.response.ResVo;
+import com.th.mymap.user.model.UserCoordinateDto;
 import com.th.mymap.user.model.UserSignInDto;
 import com.th.mymap.user.model.UserSignInVo;
 import com.th.mymap.user.model.UserSignUpDto;
@@ -37,5 +38,15 @@ public class UserController {
     @GetMapping("/refresh-token")
     public ApiResponse<UserSignInVo> getRefreshToken(HttpServletRequest req) {
         return new ApiResponse<>(service.getRefreshToken(req));
+    }
+
+    @GetMapping("/coordinate")
+    public ApiResponse<UserCoordinateDto> getCoordinate() {
+        return new ApiResponse<>(service.getCoordinate());
+    }
+
+    @PatchMapping("/coordinate")
+    public ApiResponse<UserCoordinateDto> patchCoordinate(UserCoordinateDto dto) {
+        return new ApiResponse<>(service.patchCoordinate(dto));
     }
 }
