@@ -14,6 +14,7 @@ import com.th.mymap.repository.UserRepository;
 import com.th.mymap.response.ResVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -133,4 +134,8 @@ public class LocationService {
         }
     }
 
+
+    public InputStreamResource downloadPicture(Long ilocation, String fileName) {
+        return myFileUtils.downloadFile(ilocation, fileName);
+    }
 }

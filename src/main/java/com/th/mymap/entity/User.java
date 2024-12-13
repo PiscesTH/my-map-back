@@ -32,4 +32,10 @@ public class User extends BaseEntity{
     @NotNull
     @Column(length = 50)
     private String email;
+
+    @Column
+    private Double lat;
+
+    @Column
+    private Double lng;
 }

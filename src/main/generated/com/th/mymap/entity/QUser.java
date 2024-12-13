@@ -28,6 +28,10 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> iuser = createNumber("iuser", Long.class);
 
+    public final NumberPath<Double> lat = createNumber("lat", Double.class);
+
+    public final NumberPath<Double> lng = createNumber("lng", Double.class);
+
     public final StringPath nm = createString("nm");
 
     public final StringPath uid = createString("uid");

@@ -1,13 +1,16 @@
 package com.th.mymap.common;
 
 import com.th.mymap.exception.AuthErrorCode;
+import com.th.mymap.exception.CommonErrorCode;
 import com.th.mymap.exception.RestApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -99,5 +102,19 @@ public class MyFileUtils {
             }
             dir.delete(); // 마지막으로 디렉토리 삭제
         }
+    }
+
+    public InputStreamResource downloadFile (Long pk, String fileName) {
+        Path path = Paths.get(uploadPrefixPath + "location/" + pk + "/" + fileName);
+        if (!path.toFile().exists()) {
+            throw new RestApiException(CommonErrorCode.NOT_EXIST_FILE);
+        }
+        try {
+            FileInputStream fileInputStream = new FileInputStream(path.toFile());
+            return new InputStreamResource(fileInputStream);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+        }
+        throw new RestApiException(CommonErrorCode.BAD_REQUEST);
     }
 }

@@ -7,6 +7,9 @@ import com.th.mymap.response.ApiResponse;
 import com.th.mymap.response.ResVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,8 +34,8 @@ public class LocationController {
 
     @PostMapping("/location")
     public ApiResponse<ResVo> postLocation(@RequestPart("dto") LocationDto dto,
-                                      @RequestPart("originals") List<MultipartFile> originals,
-                                      @RequestPart("thumbnails") List<MultipartFile> thumbnails) {
+                                           @RequestPart("originals") List<MultipartFile> originals,
+                                           @RequestPart("thumbnails") List<MultipartFile> thumbnails) {
         return new ApiResponse<>(service.postLocation(dto, originals, thumbnails));
     }
 
@@ -42,8 +45,13 @@ public class LocationController {
     }
 
     @GetMapping("location/pic/{fileName}")
-    public ApiResponse<?> downloadPicture(@RequestParam Long ipicture, @PathVariable String fileName) {
-        return new ApiResponse<>(null);
+    public ResponseEntity<InputStreamResource> downloadPicture(@RequestParam Long ilocation,
+                                                               @PathVariable String fileName) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=" + fileName);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(service.downloadPicture(ilocation, fileName));
     }
 
     @DeleteMapping("/location/pic")
