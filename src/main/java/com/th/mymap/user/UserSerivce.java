@@ -76,7 +76,7 @@ public class UserSerivce {
         }
 
         MyPrincipal myPrincipal = MyPrincipal.builder()
-                .iuser(entity.getIuser().intValue())
+                .iuser(entity.getIuser())
                 .build();
 
         String at = jwtTokenProvider.generateAccessToken(myPrincipal);
@@ -137,7 +137,7 @@ public class UserSerivce {
     }
 
 
-    public UserCoordinateDto patchCoordinate(UserCoordinateDto dto) {
+    public UserCoordinateDto modifyCoordinate(UserCoordinateDto dto) {
         Optional<User> opt = userRepository.findById(authenticationFacade.getLoginUserPk());
         if (opt.isEmpty()) {
             throw new RestApiException(CommonErrorCode.BAD_REQUEST);

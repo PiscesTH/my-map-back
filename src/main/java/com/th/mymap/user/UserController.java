@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @PatchMapping("/coordinate")
-    public ApiResponse<UserCoordinateDto> patchCoordinate(UserCoordinateDto dto) {
-        return new ApiResponse<>(service.patchCoordinate(dto));
+    public ApiResponse<UserCoordinateDto> modifyCoordinate(@RequestBody UserCoordinateDto dto) {
+        return new ApiResponse<>(service.modifyCoordinate(dto));
     }
 }

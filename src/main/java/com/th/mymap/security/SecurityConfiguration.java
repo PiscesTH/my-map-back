@@ -23,10 +23,15 @@ public class SecurityConfiguration {
                 .httpBasic(http -> http.disable())
                 .formLogin(formLogin -> formLogin.disable())
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(author -> author.requestMatchers(
-                                        "/*"
-                                ).permitAll()
-//                                .requestMatchers(HttpMethod.POST, "/api/history").authenticated()
+                .cors(cors -> cors.disable())
+                .authorizeHttpRequests(author -> author
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                .requestMatchers("/api/location/dummy").permitAll()
+                                .requestMatchers("/api/location").authenticated()
+                                .requestMatchers("/api/location/**").authenticated()
+//                                .requestMatchers(HttpMethod.POST, "/api/location").authenticated()
+//                                .requestMatchers(HttpMethod.DELETE, "/api/location").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/api/location/pic").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

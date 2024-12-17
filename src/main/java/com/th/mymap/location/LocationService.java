@@ -157,9 +157,9 @@ public class LocationService {
         return resultList;
     }
 
-    /*@Transactional
+    @Transactional
     public List<AllLocationVo> getAllLocationDummy() {
         User user = userRepository.getReferenceById(1L);
         return getAllLocationProc(user);
-    }*/
+    }
 }

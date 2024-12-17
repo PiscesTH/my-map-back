@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MyPrincipal {  //토큰에 넣을 때 사용하는 용도 ?
-    private int iuser;
+    private Long iuser;
 /*    @Builder.Default
     private List<String> roles = new ArrayList<>();*/
 }
