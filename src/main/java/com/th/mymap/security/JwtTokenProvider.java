@@ -70,8 +70,6 @@ public class JwtTokenProvider  {
 
     public String resolveToken(HttpServletRequest req) {
         String auth = req.getHeader(appProperties.getJwt().getHeaderSchemeName());
-        log.info("JTP uri: {}", req.getRequestURI());
-        log.info("JTP auth: {}", auth);
         if (auth == null) {
             return null;
         }

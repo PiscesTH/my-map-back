@@ -15,14 +15,14 @@ import java.io.IOException;
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer { //새로고침
 
-    @Override
+/*    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
                 .addResourceLocations("file:///D:/home/download/");
         //외부 파일 불러올 때 필요한 설정 (?)
-    }
+    }*/
 
-    /*@Override
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
                 .addResourceHandler("/**")
@@ -40,7 +40,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer { //새로고침
                         return new ClassPathResource("/static/index.html");
                     }
                 });
-    }*/
+
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:///D:/home/download/");
+    }
 
 /*    //cors설정 - 전역
     @Override

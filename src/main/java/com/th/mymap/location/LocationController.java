@@ -44,7 +44,7 @@ public class LocationController {
         return new ApiResponse<>(service.delLocation(ilocation));
     }
 
-    @GetMapping("location/pic/{fileName}")
+    @GetMapping("/location/pic/{fileName}")
     public ResponseEntity<InputStreamResource> downloadPicture(@RequestParam Long ilocation,
                                                                @PathVariable String fileName) {
         HttpHeaders headers = new HttpHeaders();
