@@ -42,7 +42,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer { //새로고침
                 });
 
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:///D:/home/download/");
+                .addResourceLocations("file:///home/download/");
+//                .addResourceLocations("file:///D:/home/download/");
     }
 
 /*    //cors설정 - 전역
