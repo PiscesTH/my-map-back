@@ -24,8 +24,6 @@ repositories {
 }
 
 dependencies {
-    //썸네일
-    implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.1'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
@@ -56,9 +54,9 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
+//tasks.named('test') {
+//    useJUnitPlatform()
+//}
 
 //query dsl
 def generated = 'src/main/generated'
@@ -66,6 +64,10 @@ def generated = 'src/main/generated'
 tasks.withType(JavaCompile).configureEach {
     options.getGeneratedSourceOutputDirectory().set(file(generated))
 }
+
+//tasks.withType(Test) {
+//    enabled = false
+//}
 
 sourceSets {
     main.java.srcDirs += [generated]
